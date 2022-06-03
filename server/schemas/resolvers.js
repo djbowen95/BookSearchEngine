@@ -44,9 +44,23 @@ const resolvers = {
       };
       throw new AuthenticationError("You are not signed in!");
       // const book = await Book.create(args);
-      const token = signToken(user);
-      return { token, book };
+      // const token = signToken(user);
+      // return { token, book };
     },
+    removeBook: async (parent, bookId, context) => {
+      if (context.user) {
+        try {
+          const user = await User.findById(context._id);
+          const deletedBook = await user.savedBooks.deleteById(bookId);
+          return deletedBook;
+
+        }
+        catch (err) {
+          console.log(err);
+        }
+      }
+      throw new AuthenticationError("You are not signed in!");
+    }
   },
 };
 
