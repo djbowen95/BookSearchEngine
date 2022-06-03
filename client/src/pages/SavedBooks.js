@@ -24,12 +24,11 @@ const SavedBooks = () => {
       const { data } = await removeBook({
         variables: { bookId },
       });
-
-      if (err) {
-        throw new Error ("The handle remove book function went wrong.")
-      }
+      removeBookId(bookId)
+    } catch (err) {
+      console.log(err);
     }
-  }
+
 
   // const [userData, setUserData] = useState({});
 
@@ -126,6 +125,7 @@ const SavedBooks = () => {
       </Container>
     </>
   );
+};
 };
 
 export default SavedBooks;
