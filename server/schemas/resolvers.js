@@ -20,7 +20,6 @@ const resolvers = {
       return { token, user };
     },
     login: async (parent, { email, password }) => {
-      console.log(email, password, "From resolvers");
       const user = await User.findOne({ email });
       if (!user) {
         throw new AuthenticationError("Email or password incorrect.");
@@ -31,6 +30,22 @@ const resolvers = {
       }
       const token = signToken(user);
       return { token, user };
+    },
+    saveBook: async (parent, { book }, context) => {
+      if (context.user) {
+        try {
+          const user = await User.findById(context._id);
+          const savedBooks = await user.savedBooks.push({book});
+          return savedBooks;
+        }
+        catch (err) {
+          console.log(err);
+        }
+      };
+      throw new AuthenticationError("You are not signed in!");
+      // const book = await Book.create(args);
+      const token = signToken(user);
+      return { token, book };
     },
   },
 };
