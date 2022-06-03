@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Jumbotron, Container, CardColumns, Card, Button } from 'react-bootstrap';
 
-import { getMe, deleteBook } from '../utils/API';
-import Auth from '../utils/auth';
+import { useQuery, useMutation } from "@apollo/client";
+import { GET_ME } from '../utils/queries';
+import { REMOVE_BOOK } from '../utils/mutations';
 import { removeBookId } from '../utils/localStorage';
+import Auth from '../utils/auth';
+
 
 const SavedBooks = () => {
   const [userData, setUserData] = useState({});
@@ -19,14 +22,17 @@ const SavedBooks = () => {
         if (!token) {
           return false;
         }
+        // Mutation
+        const {loading, data} = useQuery(GET_ME);
+        const savedBooks = data?.savedBooks || [];
+        const user = data?.user._id
+        // const response = await getMe(token);
 
-        const response = await getMe(token);
+        // if (!response.ok) {
+        //   throw new Error('something went wrong!');
+        // }
 
-        if (!response.ok) {
-          throw new Error('something went wrong!');
-        }
-
-        const user = await response.json();
+        // const user = await response.json();
         setUserData(user);
       } catch (err) {
         console.error(err);
