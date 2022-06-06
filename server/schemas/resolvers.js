@@ -31,11 +31,11 @@ const resolvers = {
       const token = signToken(user);
       return { token, user };
     },
-    saveBook: async (parent, { bookId, title, authors, description, link, image }, context) => {
+    saveBook: async (parent, { bookId, title, authors, description, image, link }, context) => {
       if (context.user) {
         const addBook = await User.findByIdAndUpdate(
           { _id: context.user._id },
-          {$push: {savedBooks: { bookId, title, authors, description, link, image }},
+          {$addToSet: {savedBooks: { bookId, title, authors, description, image, link }},
           },
           { new: true }
         );
@@ -43,15 +43,15 @@ const resolvers = {
       }
       throw new AuthenticationError("You are not signed in!");
     },
-    // const book = await Book.create(args);
-    // const token = signToken(user);
-    // return { token, book };
-    removeBook: async (parent, bookId, context) => {
+    removeBook: async (parent, {bookId}, context) => {
       if (context.user) {
         try {
-          const user = await User.findById(context._id);
-          const deletedBook = await user.savedBooks.deleteById(bookId);
-          return deletedBook;
+          const removeBook = await User.findOneAndUpdate(
+            {_id: context.user._id},
+            {$pull: {savedBooks: {bookId}}},
+            {new: true}
+          );
+          return removeBook;
         } catch (err) {
           console.log(err);
         }
