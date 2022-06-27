@@ -14,7 +14,7 @@ This is a reading list application where users can search for books and save the
 * [Questions](#questions)
     
 ## Installation
-The application is available and deployed on Heroku at:
+The application is available and deployed on Heroku at: https://serene-wildwood-14868.herokuapp.com/
 
 ## Usage
 Create an account using the login/sign up page. Search for books using the search bar. Save books using the 'save book' button. To view saved books, look at the saved book tab at the top. If users no longer want these books saved to their accounts, they can remove the books with the delete book option.
